@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-  return "☦️ BITS ቃለ ሕይወት Bot is active and running!"
+  return "☦️ BITS Gibi Gebeya Bot is active and running!"
 
 
 def run_webserver():
@@ -135,9 +135,6 @@ def send_evening_prayer_reminder():
 
 
 # --- SCHEDULE (Times in UTC - Ethiopia is UTC+3) ---
-# 6:00 AM EAT  -> 03:00 UTC
-# 6:30 AM EAT  -> 03:30 UTC
-# 9:00 PM EAT  -> 18:00 UTC
 schedule.every().day.at("03:00").do(send_morning_prayer_reminder)
 schedule.every().day.at("03:30").do(send_daily_verse)
 schedule.every().day.at("18:00").do(send_evening_prayer_reminder)
@@ -149,17 +146,17 @@ def run_scheduler():
     time.sleep(30)
 
 
+# --- START BACKGROUND TASKS & SCHEDULER FOR GUNICORN ---
+logging.info("☦️ BITS Gibi Gebeya Bot Starting...")
+
+# Immediate test call to verify tokens & push first message upon boot
+send_daily_verse()
+
+# Start the schedule loop on a background thread so it runs under Gunicorn
+t = threading.Thread(target=run_scheduler)
+t.daemon = True
+t.start()
+
+
 if __name__ == "__main__":
-  logging.info("☦️ BITS Gibi Gebeya Bot Starting...")
-
-  # Test message on startup to verify Telegram tokens work immediately
-  send_daily_verse()
-
-  # Start the schedule loop on a background thread
-  t = threading.Thread(target=run_scheduler)
-  t.daemon = True
-  t.start()
-  
-
-  # Start the webserver
   run_webserver()
