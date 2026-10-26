@@ -150,7 +150,10 @@ def run_scheduler():
 
 
 if __name__ == "__main__":
-  logging.info("☦️ BITS Qale Hiywot Bot Starting...")
+  logging.info("☦️ BITS Gibi Gebeya Bot Starting...")
+
+  # Test message on startup to verify Telegram tokens work immediately
+  send_daily_verse()
 
   # Start the schedule loop on a background thread
   t = threading.Thread(target=run_scheduler)
